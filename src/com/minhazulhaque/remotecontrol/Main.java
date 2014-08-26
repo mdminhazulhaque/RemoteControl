@@ -33,8 +33,6 @@ import android.os.StrictMode;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-//import android.util.Log;
-import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -43,8 +41,8 @@ import android.widget.EditText;
 
 public class Main extends Activity {
 
-	Socket socket = null;
-	boolean connected = false;
+	Socket mSocket = null;
+	boolean mConnected = false;
 	float mPosX;
 	float mPosY;
 
@@ -60,7 +58,7 @@ public class Main extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
-		View touchpad = (View) findViewById(R.id.touchpad);
+		final View touchpad = (View) findViewById(R.id.touchpad);
 		touchpad.setOnTouchListener(new OnTouchListener() {
 
 			private static final int MAX_CLICK_DURATION = 200;
@@ -112,6 +110,7 @@ public class Main extends Activity {
 							sendData("menu");
 							twoFingers = false;
 						} else {
+							touchpad.performClick();
 							sendData("click");
 						}
 					}
@@ -130,9 +129,9 @@ public class Main extends Activity {
 	public void onPause() {
 		super.onPause();
 		try {
-			if (connected) {
+			if (mConnected) {
 				sendData("disconnect");
-				socket.close();
+				mSocket.close();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -149,11 +148,11 @@ public class Main extends Activity {
 
 	private void sendData(String message) {
 
-		if (connected) {
+		if (mConnected) {
 			OutputStream out;
 			try {
 				String eMessage = message + "|";
-				out = socket.getOutputStream();
+				out = mSocket.getOutputStream();
 				out.write(eMessage.getBytes());
 				out.flush();
 			} catch (IOException e) {
@@ -164,11 +163,11 @@ public class Main extends Activity {
 
 	public void connect(View view) {
 
-		if (connected) {
+		if (mConnected) {
 			sendData("disconnect");
 			try {
-				socket.close();
-				connected = false;
+				mSocket.close();
+				mConnected = false;
 				Button connectButton = (Button) findViewById(R.id.connect);
 				connectButton.setText(R.string.connect);
 				EditText serverAddress = (EditText) findViewById(R.id.hostaddress);
@@ -182,8 +181,8 @@ public class Main extends Activity {
 			String hostAddress = serverAddress.getText().toString();
 
 			try {
-				socket = new Socket();
-				socket.connect(
+				mSocket = new Socket();
+				mSocket.connect(
 						(new InetSocketAddress(InetAddress
 								.getByName(hostAddress), 7777)), 1000);
 
@@ -193,8 +192,8 @@ public class Main extends Activity {
 				e.printStackTrace();
 			}
 
-			if (socket.isConnected()) {
-				connected = true;
+			if (mSocket.isConnected()) {
+				mConnected = true;
 				sendData("connect");
 				Button connectButton = (Button) findViewById(R.id.connect);
 				connectButton.setText(R.string.disconnect);
