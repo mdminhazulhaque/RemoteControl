@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Remote Control</string>
+    <string name="connect">Connect</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="defaulthost">192.168.0.101</string>
+    <string name="server">Server</string>
+    <string name="menu">Menu</string>
+</resources>
