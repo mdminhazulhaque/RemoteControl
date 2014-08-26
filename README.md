@@ -11,8 +11,8 @@ A socket based Android application to control computer cursor.
 * Android 2.3+
 
 ## Features ##
-* Single tap to click
-* Two finger tab for context menu
+* Single tap for click
+* Two finger tap for context menu
 
 ## TODO ##
 * Add scroll gesture
